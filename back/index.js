@@ -21,7 +21,15 @@ const Schema = mongoose.Schema;
 
 //user schema
 const quizSchema = new Schema({
-  quiz: { type: Object },
+  q: { type: Array },
+  a: { type: Array },
+  b: { type: Array },
+  c: { type: Array },
+  d: { type: Array },
+  corrA: { type: Array },
+  corrB: { type: Array },
+  corrC: { type: Array },
+  corrD: { type: Array },
 });
 const Quiz = db.model("Quiz", quizSchema, "quizes");
 
@@ -43,12 +51,22 @@ app.get("/", function (req, res) {
   res.send("Server is running!");
 });
 
-//get a quiz
-app.get("/quizes/:id", function (req, res, next) {
-  User.findById(
-    { id: req.params.id },
+//get all quizes
+app.get("/quizes", function (req, res, next) {
+  Quiz.find(
+    {},
     ok(next, function (user) {
       res.send(user);
+    })
+  );
+});
+
+//get a quiz
+app.get("/quizes/:id", function (req, res, next) {
+  Quiz.findById(
+    { _id: req.params.id },
+    ok(next, function (oneQuiz) {
+      res.send(oneQuiz);
     })
   );
 });
@@ -58,7 +76,7 @@ app.post("/quizes", function (req, res, next) {
   const newQuiz = new Quiz(req.body);
   newQuiz.save(
     ok(next, function (result) {
-      res.send(result);
+      res.send({ id: newQuiz._id });
     })
   );
 });
