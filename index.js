@@ -30,6 +30,7 @@ const quizSchema = new Schema({
   corrB: { type: Array },
   corrC: { type: Array },
   corrD: { type: Array },
+  password: { type: String },
 });
 const Quiz = db.model("Quiz", quizSchema, "quizes");
 
@@ -77,6 +78,49 @@ app.post("/quizes", function (req, res, next) {
   newQuiz.save(
     ok(next, function (result) {
       res.send({ id: newQuiz._id });
+    })
+  );
+});
+
+//edit a quiz using id and password
+app.put("/editQuiz/:id", (req, res, next) => {
+  Quiz.findById(
+    { _id: req.params.id },
+    ok(next, (quiz) => {
+      quiz.set(req.body);
+      quiz.save(
+        ok(next, (result) => {
+          res.send(result);
+        })
+      );
+    })
+  );
+});
+
+//get quiz using id and password
+app.post("/oneQuiz", (req, res, next) => {
+  let foundQuiz = null;
+  Quiz.find(
+    {},
+    ok(next, (quizes) => {
+      quizes.forEach((quiz) => {
+        if (quiz._id == req.body.id) {
+          foundQuiz = quiz;
+        }
+      });
+      if (foundQuiz === null) {
+        res.send({ message: "no quiz with such id" });
+      } else if (
+        foundQuiz !== null &&
+        foundQuiz.password === req.body.password
+      ) {
+        res.send(foundQuiz);
+      } else if (
+        foundQuiz !== null &&
+        foundQuiz.password !== req.body.password
+      ) {
+        res.send({ message: "wrong password" });
+      }
     })
   );
 });

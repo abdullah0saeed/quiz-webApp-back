@@ -8,5 +8,8 @@
     "mongoose": "^6.8.4",
     "morgan": "^1.10.0",
     "okay": "^1.0.0"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
   }
 }
