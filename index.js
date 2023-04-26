@@ -64,10 +64,20 @@ app.get("/quizes", function (req, res, next) {
 
 //get a quiz
 app.get("/quizes/:id", function (req, res, next) {
-  Quiz.findById(
-    { _id: req.params.id },
-    ok(next, function (oneQuiz) {
-      res.send(oneQuiz);
+  let foundQuiz = null;
+  Quiz.find(
+    {},
+    ok(next, function (quizzes) {
+      quizzes.forEach((quiz) => {
+        if (quiz._id == req.params.id) {
+          foundQuiz = quiz;
+        }
+      });
+      if (foundQuiz !== null) {
+        res.send(foundQuiz);
+      } else {
+        res.send({ message: "no quiz with such id" });
+      }
     })
   );
 });
