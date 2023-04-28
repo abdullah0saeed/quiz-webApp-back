@@ -1,6 +1,7 @@
 const express = require("express");
-// const serverless = require("serverless-http");
-const config = require("config");
+const fs = require("fs");
+// Read the contents of the config.json file
+const configData = fs.readFileSync("config.json");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -11,8 +12,11 @@ const ok = require("okay");
 const { type } = require("express/lib/response");
 const { json } = require("body-parser");
 
+// Parse the JSON data into a JavaScript object
+const config = JSON.parse(configData);
+
 //linking the database
-const dbURL = config.get("databaseLink");
+const dbURL = config.databaseLink;
 const db = mongoose.createConnection(dbURL);
 
 //manipulate database
