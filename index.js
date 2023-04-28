@@ -1,5 +1,6 @@
 const express = require("express");
 // const serverless = require("serverless-http");
+const config = require("config");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -11,9 +12,7 @@ const { type } = require("express/lib/response");
 const { json } = require("body-parser");
 
 //linking the database
-// const dbURL = "mongodb://localhost:27017/creditSystem";
-const dbURL =
-  "mongodb+srv://abdullahSaeed:As25103122000@cluster0.a4rw7zv.mongodb.net/quizSystem";
+const dbURL = config.get("databaseLink");
 const db = mongoose.createConnection(dbURL);
 
 //manipulate database
